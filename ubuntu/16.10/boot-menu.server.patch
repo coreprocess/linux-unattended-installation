@@ -1,0 +1,35 @@
+diff -cr orig/boot/grub/grub.cfg custom/boot/grub/grub.cfg
+*** orig/boot/grub/grub.cfg	2016-10-12 21:39:16.000000000 +0200
+--- custom/boot/grub/grub.cfg	2017-02-11 12:16:26.776115835 +0100
+***************
+*** 10,15 ****
+--- 10,20 ----
+  set menu_color_normal=white/black
+  set menu_color_highlight=black/light-gray
+  
++ menuentry "Unattended Install" {
++ 	set gfxpayload=keep
++ 	linux	/install/vmlinuz  auto=true priority=critical file=/cdrom/preseed/unattended.seed quiet ---
++ 	initrd	/install/initrd.gz
++ }
+  menuentry "Install Ubuntu Server" {
+  	set gfxpayload=keep
+  	linux	/install/vmlinuz  file=/cdrom/preseed/ubuntu-server.seed quiet ---
+diff -cr orig/isolinux/txt.cfg custom/isolinux/txt.cfg
+*** orig/isolinux/txt.cfg	2016-10-12 21:39:16.000000000 +0200
+--- custom/isolinux/txt.cfg	2017-02-11 12:14:16.384112678 +0100
+***************
+*** 1,4 ****
+! default install
+  label install
+    menu label ^Install Ubuntu Server
+    kernel /install/vmlinuz
+--- 1,8 ----
+! default unattended
+! label unattended
+!   menu label ^Unattended Install
+!   kernel /install/vmlinuz
+!   append  auto=true priority=critical file=/cdrom/preseed/unattended.seed vga=788 initrd=/install/initrd.gz quiet ---
+  label install
+    menu label ^Install Ubuntu Server
+    kernel /install/vmlinuz

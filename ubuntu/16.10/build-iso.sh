@@ -31,20 +31,34 @@ TMP_INITRD_DIR="`mktemp -d`"
 wget "$SOURCE_ISO_URL" -O "$TMP_DOWNLOAD_DIR/source.iso"
 7z x "$TMP_DOWNLOAD_DIR/source.iso" "-o$TMP_DISC_DIR"
 
-# patch boot menu
-cd "$TMP_DISC_DIR"
-patch -p1 -i "$SCRIPT_DIR/boot-menu.patch"
+# handle netboot image
+if [ "$IMAGE_TYPE" = "netboot" ]
+then
+  # patch boot menu
+  cd "$TMP_DISC_DIR"
+  patch -p1 -i "$SCRIPT_DIR/boot-menu.netboot.patch"
 
-# append preseed.cfg to initrd
-cd "$SCRIPT_DIR"
-cat "$TMP_DISC_DIR/initrd.gz" | gzip -d > "$TMP_INITRD_DIR/initrd"
-echo "preseed.cfg" | cpio -o -H newc -A -F "$TMP_INITRD_DIR/initrd"
-cat "$TMP_INITRD_DIR/initrd" | gzip -9c > "$TMP_DISC_DIR/initrd.gz"
+  # append preseed.cfg to initrd
+  cd "$SCRIPT_DIR"
+  cat "$TMP_DISC_DIR/initrd.gz" | gzip -d > "$TMP_INITRD_DIR/initrd"
+  echo "preseed.cfg" | cpio -o -H newc -A -F "$TMP_INITRD_DIR/initrd"
+  cat "$TMP_INITRD_DIR/initrd" | gzip -9c > "$TMP_DISC_DIR/initrd.gz"
+
+# handle server image
+elif [ "$IMAGE_TYPE" = "server" ]
+then
+  # patch boot menu
+  cd "$TMP_DISC_DIR"
+  patch -p1 -i "$SCRIPT_DIR/boot-menu.server.patch"
+
+  # add preseed file to iso
+  cp "$SCRIPT_DIR/preseed.cfg" "$TMP_DISC_DIR/preseed/unattended.seed"
+fi
 
 # build iso
 cd "$TMP_DISC_DIR"
 rm -r '[BOOT]'
-mkisofs -r -V "Ubuntu 16.10 Unattended" -cache-inodes -J -l -b isolinux.bin -c boot.cat -no-emul-boot -boot-load-size 4 -boot-info-table -input-charset utf-8 -o "$TARGET_ISO" ./
+mkisofs -r -V "ubuntu 16.10 $IMAGE_TYPE unattended" -cache-inodes -J -l -b isolinux.bin -c boot.cat -no-emul-boot -boot-load-size 4 -boot-info-table -input-charset utf-8 -o "$TARGET_ISO" ./
 
 # go back to initial directory
 cd "$CURRENT_DIR"
