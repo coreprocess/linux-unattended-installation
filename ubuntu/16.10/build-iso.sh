@@ -35,16 +35,15 @@ wget "$SOURCE_ISO_URL" -O "$TMP_DOWNLOAD_DIR/source.iso"
 cd "$TMP_DISC_DIR"
 patch -p1 -i "$SCRIPT_DIR/boot-menu.patch"
 
-# extract initrd
-cd "$TMP_INITRD_DIR"
-cat "$TMP_DISC_DIR/initrd.gz" | gzip -d | cpio -i
-
-# add preseed.cfg and repack initrd
-cp "$SCRIPT_DIR/preseed.cfg" .
-find | cpio -o --format=newc | gzip -9c > "$TMP_DISC_DIR/initrd.gz"
+# append preseed.cfg to initrd
+cd "$SCRIPT_DIR"
+cat "$TMP_DISC_DIR/initrd.gz" | gzip -d > "$TMP_INITRD_DIR/initrd"
+echo "preseed.cfg" | cpio -o -H newc -A -F "$TMP_INITRD_DIR/initrd"
+cat "$TMP_INITRD_DIR/initrd" | gzip -9c > "$TMP_DISC_DIR/initrd.gz"
 
 # build iso
 cd "$TMP_DISC_DIR"
+rm -r '[BOOT]'
 mkisofs -r -V "Ubuntu 16.10 Unattended" -cache-inodes -J -l -b isolinux.bin -c boot.cat -no-emul-boot -boot-load-size 4 -boot-info-table -input-charset utf-8 -o "$TARGET_ISO" ./
 
 # go back to initial directory
