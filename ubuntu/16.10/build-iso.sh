@@ -44,6 +44,9 @@ then
   echo "preseed.cfg" | cpio -o -H newc -A -F "$TMP_INITRD_DIR/initrd"
   cat "$TMP_INITRD_DIR/initrd" | gzip -9c > "$TMP_DISC_DIR/initrd.gz"
 
+  # set isolinux prefix
+  ISOLINUX_PREFIX=""
+
 # handle server image
 elif [ "$IMAGE_TYPE" = "server" ]
 then
@@ -53,12 +56,15 @@ then
 
   # add preseed file to iso
   cp "$SCRIPT_DIR/preseed.cfg" "$TMP_DISC_DIR/preseed/unattended.seed"
+
+  # set isolinux prefix
+  ISOLINUX_PREFIX="isolinux/"
 fi
 
 # build iso
 cd "$TMP_DISC_DIR"
 rm -r '[BOOT]'
-mkisofs -r -V "ubuntu 16.10 $IMAGE_TYPE unattended" -cache-inodes -J -l -b isolinux.bin -c boot.cat -no-emul-boot -boot-load-size 4 -boot-info-table -input-charset utf-8 -o "$TARGET_ISO" ./
+mkisofs -r -V "ubuntu 16.10 $IMAGE_TYPE unattended" -cache-inodes -J -l -b "${ISOLINUX_PREFIX}isolinux.bin" -c "${ISOLINUX_PREFIX}boot.cat" -no-emul-boot -boot-load-size 4 -boot-info-table -input-charset utf-8 -o "$TARGET_ISO" ./
 
 # go back to initial directory
 cd "$CURRENT_DIR"
