@@ -1,0 +1,33 @@
+diff -ur orig/boot/grub/grub.cfg custom/boot/grub/grub.cfg
+--- orig/boot/grub/grub.cfg	2016-10-12 04:45:19.000000000 +0200
++++ custom/boot/grub/grub.cfg	2017-02-11 06:54:56.495648781 +0100
+@@ -10,6 +10,12 @@
+ set menu_color_normal=white/black
+ set menu_color_highlight=black/light-gray
+
++menuentry "Unattended Install" {
++	set gfxpayload=keep
++	linux	/linux auto=true priority=critical preseed/file=/preseed.cfg --- quiet
++	initrd	/initrd.gz
++}
++
+ menuentry "Install" {
+ 	set gfxpayload=keep
+ 	linux	/linux --- quiet
+diff -ur orig/txt.cfg custom/txt.cfg
+--- orig/txt.cfg	2016-10-12 04:45:19.000000000 +0200
++++ custom/txt.cfg	2017-02-11 06:54:36.439648295 +0100
+@@ -1,7 +1,11 @@
+-default install
++default unattended
++label unattended
++	menu label ^Unattended Install
++	menu default
++	kernel linux
++	append vga=788 initrd=initrd.gz auto=true priority=critical preseed/file=/preseed.cfg --- quiet
+ label install
+ 	menu label ^Install
+-	menu default
+ 	kernel linux
+ 	append vga=788 initrd=initrd.gz --- quiet
+ label cli
