@@ -20,6 +20,8 @@ The following software tools are required to run the `build-iso.sh` script.
 | `pwgen` | `pwgen` |
 | `wget` | `wget` |
 
+Run `sudo apt-get install p7zip-full cpio gzip genisoimage whois pwgen wget` to install the packages on Debian/Ubuntu.
+
 ### Usage
 
 You can run the `build-iso.sh` script as regular user. No root permissions required.
