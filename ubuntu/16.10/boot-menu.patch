@@ -29,7 +29,7 @@ diff -cr orig/isolinux.cfg custom/isolinux.cfg
   include menu.cfg
   default vesamenu.c32
   prompt 0
-! timeout 10
+! timeout 100
 diff -cr orig/txt.cfg custom/txt.cfg
 *** orig/txt.cfg	2016-10-12 04:45:19.000000000 +0200
 --- custom/txt.cfg	2017-02-12 00:34:01.977187336 +0100
