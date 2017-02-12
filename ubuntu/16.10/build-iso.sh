@@ -49,4 +49,4 @@ rm -r "$TMP_DISC_DIR"
 rm -r "$TMP_INITRD_DIR"
 
 # done
-echo "The 'root' password is '$ROOT_PASSWORD'. Next steps: install system, login via root, change root password, deploy ansible (if applicable), enjoy!"
+echo "The 'root' password is '$ROOT_PASSWORD'. Next steps: install system, login via root, change root password, deploy via ansible (if applicable), enjoy!"
