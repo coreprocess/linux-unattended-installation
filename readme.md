@@ -38,7 +38,7 @@ All parameters are optional. The script will output the generated root password.
 | Parameter | Description | Default Value |
 | :--- | :--- | :--- |
 | `<root-password>` | The root password of the instances created from this ISO image | Output of `pwgen -N1 -B` |
-| `<target-iso-file>` | The path of the ISO image created by this script | `ubuntu-17.04-netboot-amd64-unattended-<root-password>.iso` |
+| `<target-iso-file>` | The path of the ISO image created by this script | `ubuntu-<version>-netboot-amd64-unattended-<root-password>.iso` |
 
 Boot the created ISO image on the target VM or physical machine. Be aware the setup will start within 10 seconds automatically and will reset the disk of the target device completely. The setup tries to eject the ISO/CD during its final stage. It usually works on physical machines, and it works on VirtualBox. It might not function in KVM environments in case the managing environment is not aware of the *eject event* and reboots with the ISO image attached. In that case, you have to detach the ISO image manually in time to prevent an endless setup loop.
 
