@@ -17,7 +17,7 @@ TMP_DISC_DIR="`mktemp -d`"
 TMP_INITRD_DIR="`mktemp -d`"
 
 # download and extract netboot iso
-wget "$SOURCE_ISO_URL" -O "$TMP_DOWNLOAD_DIR/netboot.iso"
+wget -4 "$SOURCE_ISO_URL" -O "$TMP_DOWNLOAD_DIR/netboot.iso"
 7z x "$TMP_DOWNLOAD_DIR/netboot.iso" "-o$TMP_DISC_DIR"
 
 # patch boot menu
