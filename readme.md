@@ -16,7 +16,7 @@ Run `sudo apt-get install qemu-utils qemu-kvm` in addition to install software t
 
 ### Usage
 
-#### build-iso.sh
+#### Build ISO images
 
 You can run the `build-iso.sh` script as regular user. No root permissions required.
 
@@ -35,7 +35,7 @@ Boot the created ISO image on the target VM or physical machine. Be aware the se
 
 Power-on the machine and log into it as root using your ssh key. The ssh host key will be generated on first boot.
 
-#### build-disk.sh
+#### Build disk images
 
 You can run the `build-disk.sh` script as regular user. No root permissions required, if you are able to run `kvm` within your user.
 
