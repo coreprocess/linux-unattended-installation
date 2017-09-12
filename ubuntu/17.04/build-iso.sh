@@ -33,7 +33,7 @@ patch -p1 -i "$SCRIPT_DIR/boot-menu.patch"
 # prepare preseed.cfg
 # ... disable root password
 cp "$SCRIPT_DIR/preseed.cfg" "$TMP_INITRD_DIR/preseed.cfg"
-sed -i "s/#d-i passwd\\/root-password-crypted password.*/d-i passwd\\/root-password-crypted password !/g" "$TMP_INITRD_DIR/preseed.cfg"
+sed -i "s/#d-i passwd\\/root-password-crypted password.*/d-i passwd\\/root-password-crypted password !!/g" "$TMP_INITRD_DIR/preseed.cfg"
 # ... apply authorized keys
 SSH_PUBLIC_KEY_SAFE=$(printf '%s\n' "$SSH_PUBLIC_KEY" | sed 's/[[\.*/]/\\&/g; s/$$/\\&/; s/^^/\\&/')
 sed -i "s/###_SSH_AUTHORIZED_KEYS_###/$SSH_PUBLIC_KEY_SAFE/g" "$TMP_INITRD_DIR/preseed.cfg"
