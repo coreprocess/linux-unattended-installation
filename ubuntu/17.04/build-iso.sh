@@ -14,10 +14,6 @@ fi
 
 SSH_PUBLIC_KEY="`cat "$SSH_PUBLIC_KEY_FILE"`"
 
-# generate and encrypt root password
-ROOT_PASSWORD="`pwgen -N1 -B 24`"
-ROOT_PASSWORD_ENCRYPTED="`printf "$ROOT_PASSWORD" | mkpasswd -s -m sha-512`"
-
 # get directories
 CURRENT_DIR="`pwd`"
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
@@ -35,10 +31,9 @@ cd "$TMP_DISC_DIR"
 patch -p1 -i "$SCRIPT_DIR/boot-menu.patch"
 
 # prepare preseed.cfg
-# ... apply root password
-ROOT_PASSWORD_ENCRYPTED_SAFE=$(printf '%s\n' "$ROOT_PASSWORD_ENCRYPTED" | sed 's/[[\.*/]/\\&/g; s/$$/\\&/; s/^^/\\&/')
+# ... disable root password
 cp "$SCRIPT_DIR/preseed.cfg" "$TMP_INITRD_DIR/preseed.cfg"
-sed -i "s/#d-i passwd\\/root-password-crypted password.*/d-i passwd\\/root-password-crypted password $ROOT_PASSWORD_ENCRYPTED_SAFE/g" "$TMP_INITRD_DIR/preseed.cfg"
+sed -i "s/#d-i passwd\\/root-password-crypted password.*/d-i passwd\\/root-password-crypted password !/g" "$TMP_INITRD_DIR/preseed.cfg"
 # ... apply authorized keys
 SSH_PUBLIC_KEY_SAFE=$(printf '%s\n' "$SSH_PUBLIC_KEY" | sed 's/[[\.*/]/\\&/g; s/$$/\\&/; s/^^/\\&/')
 sed -i "s/###_SSH_AUTHORIZED_KEYS_###/$SSH_PUBLIC_KEY_SAFE/g" "$TMP_INITRD_DIR/preseed.cfg"
@@ -63,4 +58,4 @@ rm -r "$TMP_DISC_DIR"
 rm -r "$TMP_INITRD_DIR"
 
 # done
-echo "The 'root' password is '$ROOT_PASSWORD'. Next steps: install system, login via root, change root password, deploy via ansible (if applicable), enjoy!"
+echo "Next steps: install system, login via root, adjust the authorized keys, set a root password (if you want to), deploy via ansible (if applicable), enjoy!"
