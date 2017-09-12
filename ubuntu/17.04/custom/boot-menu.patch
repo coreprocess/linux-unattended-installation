@@ -6,13 +6,13 @@ diff -cr orig/boot/grub/grub.cfg custom/boot/grub/grub.cfg
 --- 10,21 ----
   set menu_color_normal=white/black
   set menu_color_highlight=black/light-gray
-  
+
 + menuentry "Unattended Install" {
 + 	set gfxpayload=keep
 + 	linux	/linux auto=true priority=critical preseed/file=/preseed.cfg --- quiet
 + 	initrd	/initrd.gz
 + }
-+ 
++
   menuentry "Install" {
   	set gfxpayload=keep
   	linux	/linux --- quiet
@@ -40,7 +40,7 @@ diff -cr orig/txt.cfg custom/txt.cfg
   	menu label ^Install
 - 	menu default
   	kernel linux
-  	append vga=788 initrd=initrd.gz --- quiet 
+  	append vga=788 initrd=initrd.gz --- quiet
   label cli
 --- 1,11 ----
 ! default unattended
@@ -52,5 +52,5 @@ diff -cr orig/txt.cfg custom/txt.cfg
   label install
   	menu label ^Install
   	kernel linux
-  	append vga=788 initrd=initrd.gz --- quiet 
+  	append vga=788 initrd=initrd.gz --- quiet
   label cli
