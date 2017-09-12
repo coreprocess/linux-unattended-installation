@@ -5,14 +5,12 @@ set -e
 SSH_PUBLIC_KEY_FILE=${1:-"$HOME/.ssh/id_rsa.pub"}
 TARGET_ISO=${2:-"`pwd`/ubuntu-16.04-netboot-amd64-unattended.iso"}
 
-# read ssh public key
+# check if ssh key exists
 if [ ! -f "$SSH_PUBLIC_KEY_FILE" ];
 then
     echo "Error: public SSH key $SSH_PUBLIC_KEY_FILE not found!"
     exit 1
 fi
-
-SSH_PUBLIC_KEY="`cat "$SSH_PUBLIC_KEY_FILE"`"
 
 # get directories
 CURRENT_DIR="`pwd`"
@@ -23,24 +21,27 @@ TMP_INITRD_DIR="`mktemp -d`"
 
 # download and extract netboot iso
 SOURCE_ISO_URL="http://archive.ubuntu.com/ubuntu/dists/xenial/main/installer-amd64/current/images/netboot/mini.iso"
-wget -4 "$SOURCE_ISO_URL" -O "$TMP_DOWNLOAD_DIR/netboot.iso"
-7z x "$TMP_DOWNLOAD_DIR/netboot.iso" "-o$TMP_DISC_DIR"
+cd "$TMP_DOWNLOAD_DIR"
+wget -4 "$SOURCE_ISO_URL" -O "./netboot.iso"
+7z x "./netboot.iso" "-o$TMP_DISC_DIR"
 
 # patch boot menu
 cd "$TMP_DISC_DIR"
-patch -p1 -i "$SCRIPT_DIR/boot-menu.patch"
+patch -p1 -i "$SCRIPT_DIR/custom/boot-menu.patch"
 
-# prepare preseed.cfg
-cp "$SCRIPT_DIR/preseed.cfg" "$TMP_INITRD_DIR/preseed.cfg"
-# ... apply authorized keys
-SSH_PUBLIC_KEY_SAFE=$(printf '%s\n' "$SSH_PUBLIC_KEY" | sed 's/[[\.*/]/\\&/g; s/$$/\\&/; s/^^/\\&/')
-sed -i "s/###_SSH_AUTHORIZED_KEYS_###/$SSH_PUBLIC_KEY_SAFE/g" "$TMP_INITRD_DIR/preseed.cfg"
-
-# append preseed.cfg to initrd
+# prepare assets
 cd "$TMP_INITRD_DIR"
-cat "$TMP_DISC_DIR/initrd.gz" | gzip -d > "$TMP_INITRD_DIR/initrd"
-echo "preseed.cfg" | cpio -o -H newc -A -F "$TMP_INITRD_DIR/initrd"
-cat "$TMP_INITRD_DIR/initrd" | gzip -9c > "$TMP_DISC_DIR/initrd.gz"
+mkdir "./custom"
+cp "$SCRIPT_DIR/custom/preseed.cfg" "./preseed.cfg"
+cp "$SSH_PUBLIC_KEY_FILE" "./custom/userkey.pub"
+cp "$SCRIPT_DIR/custom/ssh-host-keygen.service" "./custom/ssh-host-keygen.service"
+
+# append assets to initrd image
+cd "$TMP_INITRD_DIR"
+cat "$TMP_DISC_DIR/initrd.gz" | gzip -d > "./initrd"
+echo "./preseed.cfg" | fakeroot cpio -o -H newc -A -F "./initrd"
+find "./custom" | fakeroot cpio -o -H newc -A -F "./initrd"
+cat "./initrd" | gzip -9c > "$TMP_DISC_DIR/initrd.gz"
 
 # build iso
 cd "$TMP_DISC_DIR"
