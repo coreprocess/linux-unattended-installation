@@ -8,6 +8,15 @@ Use the `build-iso.sh` script to create an ISO file based on the netsetup image 
 
 Use the `build-disk.sh` script to create a cloneable preinstalled disk image based on the output of `build-iso.sh`.
 
+### Features
+
+* Fully automated installation procedure.
+* Shutdown and power off when finished. We consider this a feature since it produces a defined and detectable state once the setup is complete.
+* Authentication based on SSH public key and not on a password.
+* Setup ensures about 25% of free disk space in the LVM group. We consider this a feature since it enables you to use LVM snapshots; e.g., for backup purposes.
+* Generates SSH server keys on first boot and not during setup stage. We consider this a feature since it enables you to use the installed image as a template for multiple machines.
+* Prints IPv4 and IPv6 address of the device on screen once booted.
+
 ### Prerequisites
 
 Run `sudo apt-get install p7zip-full cpio gzip genisoimage whois pwgen wget fakeroot` to install software tools required by the `build-iso.sh` script.
