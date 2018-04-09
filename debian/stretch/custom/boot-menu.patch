@@ -1,0 +1,14 @@
+diff -cr orig/isolinux.cfg custom/isolinux.cfg
+*** orig/isolinux.cfg	2016-10-12 04:45:19.000000000 +0200
+--- custom/isolinux.cfg	2017-02-12 00:36:09.201190417 +0100
+***************
+*** 4,7 ****
+  include menu.cfg
+  default vesamenu.c32
+  prompt 0
+! timeout 0
+--- 4,7 ----
+  include menu.cfg
+  default vesamenu.c32
+  prompt 0
+! timeout 100
