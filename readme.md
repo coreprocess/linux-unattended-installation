@@ -19,7 +19,7 @@ Use the `build-disk.sh` script to create a cloneable preinstalled disk image bas
 
 ### Prerequisites
 
-Run `sudo apt-get install p7zip-full cpio gzip genisoimage whois pwgen wget fakeroot` to install software tools required by the `build-iso.sh` script.
+Run `sudo apt-get install p7zip-full cpio gzip genisoimage whois pwgen wget fakeroot isolinux xorriso` to install software tools required by the `build-iso.sh` script.
 
 Run `sudo apt-get install qemu-utils qemu-kvm` in addition to install software tools required by the `build-disk.sh` script.
 
