@@ -46,7 +46,7 @@ cat "./initrd" | gzip -9c > "$TMP_DISC_DIR/initrd.gz"
 # build iso
 cd "$TMP_DISC_DIR"
 rm -r '[BOOT]'
-mkisofs -r -V "ubuntu 16.04 netboot unattended" -cache-inodes -J -l -b isolinux.bin -c boot.cat -no-emul-boot -boot-load-size 4 -boot-info-table -input-charset utf-8 -o "$TARGET_ISO" ./
+xorriso -as mkisofs -r -V "ubuntu_1604_netboot_unattended" -J -b isolinux.bin -c boot.cat -no-emul-boot -boot-load-size 4 -boot-info-table -input-charset utf-8 -isohybrid-mbr /usr/lib/ISOLINUX/isohdpfx.bin -o "$TARGET_ISO" ./
 
 # go back to initial directory
 cd "$CURRENT_DIR"
