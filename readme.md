@@ -16,6 +16,7 @@ Use the `build-disk.sh` script to create a cloneable preinstalled disk image bas
 * Setup ensures about 25% of free disk space in the LVM group. We consider this a feature since it enables you to use LVM snapshots; e.g., for backup purposes.
 * Generates SSH server keys on first boot and not during setup stage. We consider this a feature since it enables you to use the installed image as a template for multiple machines.
 * Prints IPv4 and IPv6 address of the device on screen once booted.
+* USB bootable hybrid ISO image.
 
 ### Prerequisites
 
