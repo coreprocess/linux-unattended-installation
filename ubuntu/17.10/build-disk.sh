@@ -1,6 +1,10 @@
 #!/bin/bash
 set -e
 
+# lookup specific binaries
+: "${BIN_QEMU_IMG:=$(type -P qemu-img)}"
+: "${BIN_KVM:=$(type -P kvm)}"
+
 # get parameters
 RAM_SIZE=${1:-"2048"}
 DISK_SIZE=${2:-"10G"}
@@ -14,8 +18,8 @@ TMP_ISO_DIR="`mktemp -d`"
 eval "$SCRIPT_DIR/build-iso.sh" "$SSH_PUBLIC_KEY_FILE" "$TMP_ISO_DIR/ubuntu-17.10-netboot-amd64-unattended.iso"
 
 # create image and run installer
-qemu-img create "$DISK_FILE" -f "$DISK_FORMAT" "$DISK_SIZE"
-kvm -m "$RAM_SIZE" -cdrom "$TMP_ISO_DIR/ubuntu-17.10-netboot-amd64-unattended.iso" -boot once=d "$DISK_FILE"
+"$BIN_QEMU_IMG" create "$DISK_FILE" -f "$DISK_FORMAT" "$DISK_SIZE"
+"$BIN_KVM" -m "$RAM_SIZE" -cdrom "$TMP_ISO_DIR/ubuntu-17.10-netboot-amd64-unattended.iso" -boot once=d "$DISK_FILE"
 
 # remove tmp
 rm -r -f "$TMP_ISO_DIR"

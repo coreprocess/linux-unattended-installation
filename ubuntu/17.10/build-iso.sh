@@ -1,6 +1,10 @@
 #!/bin/bash
 set -e
 
+# lookup specific binaries
+: "${BIN_7Z:=$(type -P 7z)}"
+: "${BIN_XORRISO:=$(type -P xorriso)}"
+
 # get parameters
 SSH_PUBLIC_KEY_FILE=${1:-"$HOME/.ssh/id_rsa.pub"}
 TARGET_ISO=${2:-"`pwd`/ubuntu-17.10-netboot-amd64-unattended.iso"}
@@ -23,7 +27,7 @@ TMP_INITRD_DIR="`mktemp -d`"
 SOURCE_ISO_URL="http://archive.ubuntu.com/ubuntu/dists/artful/main/installer-amd64/current/images/netboot/mini.iso"
 cd "$TMP_DOWNLOAD_DIR"
 wget -4 "$SOURCE_ISO_URL" -O "./netboot.iso"
-7z x "./netboot.iso" "-o$TMP_DISC_DIR"
+"$BIN_7Z" x "./netboot.iso" "-o$TMP_DISC_DIR"
 
 # patch boot menu
 cd "$TMP_DISC_DIR"
@@ -46,7 +50,7 @@ cat "./initrd" | gzip -9c > "$TMP_DISC_DIR/initrd.gz"
 # build iso
 cd "$TMP_DISC_DIR"
 rm -r '[BOOT]'
-xorriso -as mkisofs -r -V "ubuntu_1710_netboot_unattended" -J -b isolinux.bin -c boot.cat -no-emul-boot -boot-load-size 4 -boot-info-table -input-charset utf-8 -isohybrid-mbr /usr/lib/ISOLINUX/isohdpfx.bin -o "$TARGET_ISO" ./
+"$BIN_XORRISO" -as mkisofs -r -V "ubuntu_1710_netboot_unattended" -J -b isolinux.bin -c boot.cat -no-emul-boot -boot-load-size 4 -boot-info-table -input-charset utf-8 -isohybrid-mbr /usr/lib/ISOLINUX/isohdpfx.bin -o "$TARGET_ISO" ./
 
 # go back to initial directory
 cd "$CURRENT_DIR"
