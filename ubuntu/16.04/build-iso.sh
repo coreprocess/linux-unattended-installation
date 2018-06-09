@@ -31,6 +31,7 @@ wget -4 "$SOURCE_ISO_URL" -O "./netboot.iso"
 
 # patch boot menu
 cd "$TMP_DISC_DIR"
+dos2unix "./isolinux.cfg"
 patch -p1 -i "$SCRIPT_DIR/custom/boot-menu.patch"
 
 # prepare assets
@@ -50,7 +51,7 @@ cat "./initrd" | gzip -9c > "$TMP_DISC_DIR/initrd.gz"
 # build iso
 cd "$TMP_DISC_DIR"
 rm -r '[BOOT]'
-"$BIN_XORRISO" -as mkisofs -r -V "ubuntu_1604_netboot_unattended" -J -b isolinux.bin -c boot.cat -no-emul-boot -boot-load-size 4 -boot-info-table -input-charset utf-8 -isohybrid-mbr /usr/lib/ISOLINUX/isohdpfx.bin -o "$TARGET_ISO" ./
+"$BIN_XORRISO" -as mkisofs -r -V "ubuntu_1604_netboot_unattended" -J -b isolinux.bin -c boot.cat -no-emul-boot -boot-load-size 4 -boot-info-table -input-charset utf-8 -isohybrid-mbr /usr/lib/ISOLINUX/isohdpfx.bin -eltorito-alt-boot -e boot/grub/efi.img -no-emul-boot -isohybrid-gpt-basdat -o "$TARGET_ISO" ./
 
 # go back to initial directory
 cd "$CURRENT_DIR"
