@@ -17,6 +17,7 @@ Use the `build-disk.sh` script to create a cloneable preinstalled disk image bas
 * Generates SSH server keys on first boot and not during setup stage. We consider this a feature since it enables you to use the installed image as a template for multiple machines.
 * Prints IPv4 and IPv6 address of the device on screen once booted.
 * USB bootable hybrid ISO image.
+* UEFI and BIOS mode supported.
 
 ### Prerequisites
 
