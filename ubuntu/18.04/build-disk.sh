@@ -4,6 +4,14 @@ set -e
 # lookup specific binaries
 : "${BIN_QEMU_IMG:=$(type -P qemu-img)}"
 : "${BIN_KVM:=$(type -P kvm)}"
+if [ -z "$BIN_QEMU_IMG" ]; then
+    echo qemu-img not found
+    exit 2
+fi
+if [ -z "$BIN_KVM" ]; then
+    echo kvm not found
+    exit 2
+fi
 
 # get parameters
 RAM_SIZE=${1:-"2048"}
