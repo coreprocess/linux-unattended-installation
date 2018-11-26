@@ -4,6 +4,7 @@ set -e
 # lookup specific binaries
 : "${BIN_7Z:=$(type -P 7z)}"
 : "${BIN_XORRISO:=$(type -P xorriso)}"
+: "${BIN_CPIO:=$(type -P gnucpio || type -P cpio)}"
 
 # get parameters
 SSH_PUBLIC_KEY_FILE=${1:-"$HOME/.ssh/id_rsa.pub"}
@@ -44,14 +45,14 @@ cp "$SCRIPT_DIR/custom/ssh-host-keygen.service" "./custom/ssh-host-keygen.servic
 # append assets to initrd image
 cd "$TMP_INITRD_DIR"
 cat "$TMP_DISC_DIR/initrd.gz" | gzip -d > "./initrd"
-echo "./preseed.cfg" | fakeroot cpio -o -H newc -A -F "./initrd"
-find "./custom" | fakeroot cpio -o -H newc -A -F "./initrd"
+echo "./preseed.cfg" | fakeroot "$BIN_CPIO" -o -H newc -A -F "./initrd"
+find "./custom" | fakeroot "$BIN_CPIO" -o -H newc -A -F "./initrd"
 cat "./initrd" | gzip -9c > "$TMP_DISC_DIR/initrd.gz"
 
 # build iso
 cd "$TMP_DISC_DIR"
 rm -r '[BOOT]'
-"$BIN_XORRISO" -as mkisofs -r -V "ubuntu_1804_netboot_unattended" -J -b isolinux.bin -c boot.cat -no-emul-boot -boot-load-size 4 -boot-info-table -input-charset utf-8 -isohybrid-mbr /usr/lib/ISOLINUX/isohdpfx.bin -eltorito-alt-boot -e boot/grub/efi.img -no-emul-boot -isohybrid-gpt-basdat -o "$TARGET_ISO" ./
+"$BIN_XORRISO" -as mkisofs -r -V "ubuntu_1804_netboot_unattended" -J -b isolinux.bin -c boot.cat -no-emul-boot -boot-load-size 4 -boot-info-table -input-charset utf-8 -isohybrid-mbr "$SCRIPT_DIR/custom/isohdpfx.bin" -eltorito-alt-boot -e boot/grub/efi.img -no-emul-boot -isohybrid-gpt-basdat -o "$TARGET_ISO" ./
 
 # go back to initial directory
 cd "$CURRENT_DIR"
