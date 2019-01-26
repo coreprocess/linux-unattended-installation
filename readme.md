@@ -33,6 +33,23 @@ Run `brew install p7zip xorriso wget dos2unix fakeroot core-process/gnucpio/gnuc
 
 The script `build-disk.sh` is not supported on Mac.
 
+#### Docker
+
+Build the Docker image using `docker build -t ubuntu-unattended .`.
+Afterwards, run the image to create the ISO, running the build script you want to use, e.g:
+
+```sh
+docker run \
+  --rm \
+  -ti \
+  -v "$(pwd)":/linux-unattended-installation \
+  -v "$HOME/.ssh/id_rsa.pub":/root/.ssh/id_rsa.pub:ro \
+  ubuntu-unattended \
+  ubuntu/17.10/build-iso.sh
+```
+
+The script `build-disk.sh` is not supported on Docker.
+
 ### Usage
 
 #### Build ISO images
