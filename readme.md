@@ -27,6 +27,12 @@ Run `sudo apt-get install dos2unix p7zip-full cpio gzip genisoimage whois pwgen 
 
 Run `sudo apt-get install qemu-utils qemu-kvm` in addition to install software tools required by the `build-disk.sh` script.
 
+#### Mac (Ubuntu 18.04 LTS only)
+
+Run `brew install p7zip xorriso wget dos2unix fakeroot core-process/gnucpio/gnucpio` to install software tools required by the `build-iso.sh` script.
+
+The script `build-disk.sh` is not supported on Mac.
+
 #### Docker
 
 Run `docker build -t ubuntu-unattended .` to build the Docker image.
