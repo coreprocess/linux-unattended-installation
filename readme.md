@@ -33,6 +33,44 @@ Run `brew install p7zip xorriso wget dos2unix fakeroot core-process/gnucpio/gnuc
 
 The script `build-disk.sh` is not supported on Mac.
 
+#### Docker
+
+Run `docker build -t ubuntu-unattended .` to build the Docker image.
+
+When running the Docker container, add the public key you want to use and the ISO output directory as volume links and specify the desired Ubuntu version as parameter (defaults to 18.04), e.g:
+
+```sh
+docker run \
+  --rm \
+  -t \
+  -v "$HOME/.ssh/id_rsa.pub:/root/.ssh/id_rsa.pub:ro" \
+  -v "$(pwd):/iso" \
+  ubuntu-unattended \
+  16.04
+```
+
+Explanation of the command switches:
+```sh
+--rm
+# Remove the Docker container when finished
+
+-t
+# Show terminal output
+
+-v "$HOME/.ssh/id_rsa.pub:/root/.ssh/id_rsa.pub:ro"
+# Mount "$HOME/.ssh/id_rsa.pub" from your machine to "/root/.ssh/id_rsa.pub"
+# in the container (read only).
+# This is the path, where the script expects your public key to be.
+
+-v "$(pwd):/iso"
+# Mount the current working directory from your machine to "/iso"
+# in the container. This is the path, where the ISO file is written to.
+```
+
+It is enough to build the container once. If you want to add a custom preseed config when executing `docker run`, mount your local copy of the file into the container, e.g: `-v "$(pwd)/my_preseed.cfg:/ubuntu/<version>/custom/preseed.cfg`.
+
+The script `build-disk.sh` is not supported on Docker.
+
 ### Usage
 
 #### Build ISO images
