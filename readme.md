@@ -29,7 +29,7 @@ Run `sudo apt-get install qemu-utils qemu-kvm` in addition to install software t
 
 #### Mac (Ubuntu 18.04 LTS only)
 
-Run `brew install p7zip xorriso wget dos2unix fakeroot core-process/gnucpio/gnucpio` to install software tools required by the `build-iso.sh` script.
+Run `brew install p7zip xorriso wget dos2unix fakeroot coreprocess/gnucpio/gnucpio` to install software tools required by the `build-iso.sh` script.
 
 The script `build-disk.sh` is not supported on Mac.
 
