@@ -67,7 +67,7 @@ Explanation of the command switches:
 # in the container. This is the path, where the ISO file is written to.
 ```
 
-It is enough to build the container once. If you want to add a custom preseed config when executing `docker run`, mount your local copy of the file into the container, e.g: `-v "$(pwd)/my_preseed.cfg:/ubuntu/<version>/custom/preseed.cfg`.
+It is enough to build the container once. If you want to add a custom preseed config when executing `docker run`, mount your local copy of the file into the container, e.g: `-v "$(pwd)/my_preseed.cfg:/ubuntu/<version>/custom/preseed.cfg"`.
 
 The script `build-disk.sh` is not supported on Docker.
 
