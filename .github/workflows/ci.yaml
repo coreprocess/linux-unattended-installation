@@ -14,10 +14,10 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - name: Setup fake ssh key
-        run: echo "dummyssh" > ${{ GITHUB_WORKSPACE }}/dummy_id_rsa.pub
+        run: echo "dummyssh" > /tmp/dummy_id_rsa.pub
       - name: Install dependencies 
         run: |
           sudo apt update
           sudo apt-get install dos2unix p7zip-full cpio gzip genisoimage whois pwgen wget fakeroot isolinux xorriso qemu-utils qemu-kvm
       - name: Build iso image
-        run: ./ubuntu/${{ matrix.build-version }}/build-iso.sh ${{ GITHUB_WORKSPACE }}/dummy_id_rsa.pub
+        run: ./ubuntu/${{ matrix.build-version }}/build-iso.sh /tmp/dummy_id_rsa.pub
