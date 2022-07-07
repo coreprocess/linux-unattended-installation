@@ -14,7 +14,7 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - name: Setup fake ssh key
-        run: echo "dummyssh" > dummy_id_rsa.pub
+        run: echo "dummyssh" > ./dummy_id_rsa.pub
       - name: Install dependencies 
         run: |
           sudo apt update
