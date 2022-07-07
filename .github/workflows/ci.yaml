@@ -9,8 +9,8 @@ jobs:
   command-matrix:
     runs-on: ubuntu-latest
     strategy:
-    matrix:
-      build-version: ["16.04", "18.04", "20.04"]
+      matrix:
+        build-version: ["16.04", "18.04", "20.04"]
     steps:
       - uses: actions/checkout@v3
       - name: Setup fake ssh key
