@@ -21,5 +21,3 @@ jobs:
           sudo apt-get install dos2unix p7zip-full cpio gzip genisoimage whois pwgen wget fakeroot isolinux xorriso qemu-utils qemu-kvm
       - name: Build iso image
         run: ./ubuntu/${{ matrix.build-version }}/build-iso.sh /tmp/dummy_id_rsa.pub
-      - name: Build disk image
-        run: ./ubuntu/${{ matrix.build-version }}/build-disk.sh 2048 10G qcow2 /tmp/dummy_id_rsa.pub
