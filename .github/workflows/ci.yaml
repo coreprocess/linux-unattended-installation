@@ -22,4 +22,4 @@ jobs:
       - name: Build iso image
         run: ./ubuntu/${{ matrix.build-version }}/build-iso.sh /tmp/dummy_id_rsa.pub
       - name: Build disk image
-        run: ./ubuntu/${{ matrix.build-version }}/build-disk.sh /tmp/dummy_id_rsa.pub
+        run: ./ubuntu/${{ matrix.build-version }}/build-disk.sh 2048 10G qcow2 /tmp/dummy_id_rsa.pub
